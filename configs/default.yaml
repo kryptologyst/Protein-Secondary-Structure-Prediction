@@ -1,0 +1,93 @@
+# Default configuration for protein structure prediction
+
+# Model configuration
+model:
+  type: "bilstm"  # Options: bilstm, transformer, cnnlstm
+  vocab_size: 20
+  num_classes: 3
+  max_length: 512
+  include_features: false
+  
+  # BiLSTM specific
+  bilstm:
+    embed_dim: 128
+    hidden_dim: 256
+    num_layers: 2
+    dropout: 0.3
+  
+  # Transformer specific
+  transformer:
+    embed_dim: 256
+    num_heads: 8
+    num_layers: 6
+    hidden_dim: 512
+    dropout: 0.1
+  
+  # CNN-LSTM specific
+  cnnlstm:
+    embed_dim: 128
+    cnn_channels: 64
+    kernel_sizes: [3, 5, 7]
+    lstm_hidden_dim: 256
+    num_lstm_layers: 2
+    dropout: 0.3
+
+# Data configuration
+data:
+  dataset_type: "synthetic"  # Options: synthetic, cb513
+  data_dir: "data/"
+  batch_size: 32
+  num_workers: 4
+  
+  # Synthetic dataset
+  synthetic:
+    num_samples: 1000
+    min_length: 20
+    max_length: 100
+  
+  # Train/val/test splits
+  splits:
+    train_ratio: 0.8
+    val_ratio: 0.1
+    test_ratio: 0.1
+
+# Training configuration
+training:
+  num_epochs: 50
+  learning_rate: 0.001
+  weight_decay: 1e-5
+  use_scheduler: true
+  scheduler_patience: 5
+  use_early_stopping: true
+  early_stopping_patience: 10
+  early_stopping_min_delta: 0.0
+  
+  # Loss function
+  loss:
+    type: "cross_entropy"  # Options: cross_entropy, focal, dice
+    focal:
+      alpha: 1.0
+      gamma: 2.0
+    dice:
+      smooth: 1e-6
+
+# Evaluation configuration
+evaluation:
+  save_results: true
+  save_dir: "results/"
+  generate_plots: true
+  generate_report: true
+
+# Logging configuration
+logging:
+  level: "INFO"
+  log_file: null  # Set to file path to log to file
+
+# Device configuration
+device:
+  use_cuda: true
+  use_mps: true  # Apple Silicon
+  fallback_to_cpu: true
+
+# Reproducibility
+seed: 42
